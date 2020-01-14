@@ -613,22 +613,8 @@ namespace Shadowsocks.Controller
                 speedTester.BeginConnect();
                 IAsyncResult result = remote.BeginConnect(remoteEP,
                     new AsyncCallback(ConnectCallback), new CallbackStatus());
-                double t = cfg.connect_timeout <= 0 ? 30 : cfg.connect_timeout;
-                bool success = result.AsyncWaitHandle.WaitOne((int)(t * 1000), true);
-                if (!success)
-                {
-                    ((CallbackStatus)result.AsyncState).SetIfEqu(-1, 0);
-                    if (((CallbackStatus)result.AsyncState).Status == -1)
-                    {
-                        if (lastErrCode == 0)
-                        {
-                            lastErrCode = 8;
-                            server.ServerSpeedLog().AddTimeoutTimes();
-                        }
-                        CloseSocket(ref remote);
-                        Close();
-                    }
-                }
+                result.AsyncWaitHandle.WaitOne((int)(1000), true);
+                
             }
         }
 
